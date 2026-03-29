@@ -1,0 +1,60 @@
+{
+  "name": "alumni-influencers",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "nodemon -e ts,js,json --exec \"npx ts-node src/index.ts\"",
+    "build": "tsc && npm run postbuild",
+    "postbuild": "cp -r src/Templates dist/Templates 2>/dev/null || xcopy src\\Templates dist\\Templates /E /I /Y",
+    "prisma:generate": "npx prisma generate",
+    "prisma:deploy": "npx prisma migrate deploy",
+    "test:db": "ts-node src/test-db.ts",
+    "swagger": "ts-node src/swagger-gen.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1011.0",
+    "@prisma/adapter-pg": "^7.4.1",
+    "@prisma/client": "^7.6.0",
+    "@prisma/config": "^7.4.1",
+    "axios": "^1.13.2",
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dayjs": "^1.11.19",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "jsrsasign": "^11.1.0",
+    "nunjucks": "^3.2.4",
+    "pg": "^8.17.1",
+    "swagger-ui-express": "^5.0.1",
+    "zod": "^4.3.5"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/jsrsasign": "^10.5.15",
+    "@types/node": "^25.0.9",
+    "@types/nodemailer": "^7.0.11",
+    "@types/nunjucks": "^3.2.6",
+    "@types/pg": "^8.16.0",
+    "@types/swagger-ui-express": "^4.1.8",
+    "nodemon": "^3.1.11",
+    "prisma": "^7.6.0",
+    "swagger-autogen": "^2.23.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  }
+}

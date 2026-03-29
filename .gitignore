@@ -1,0 +1,10 @@
+#Server
+.env
+.env.local
+.env.dev
+node_modules
+dist
+
+
+#Root
+.DS_Store
