@@ -3,45 +3,19 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
 }
 
-/**
- * =========================
- * ENUMS
- * =========================
- */
-
-enum UserStatus {
-  ACTIVE
-  INACTIVE
-  PENDING
-}
-
-enum Status {
-  ACTIVE
-  INACTIVE
-  PENDING
-  SUSPENDED
-}
-
-enum Gender {
-  MALE
-  FEMALE
-}
-
-/**
- * =========================
- * USER
- * =========================
- */
-
+// =========================
+// USER
+// =========================
+// Status field mimics ENUM: "ACTIVE" | "INACTIVE" | "PENDING"
 model User {
   id       String     @id @default(uuid())
   email    String     @unique
   password String
   name     String?
-  status   UserStatus @default(ACTIVE)
+  status   String     @default("ACTIVE")
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
