@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { config } from "../config/config";
+import * as config from "../config";
 
 export interface UserPayload {
   id: string;
@@ -26,7 +26,7 @@ export const protect = (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    req.user = jwt.verify(token, config.JWT_SECRET) as UserPayload;
+    req.user = jwt.verify(token, config.JWT_SECRET!) as UserPayload;
     next();
   } catch (error) {
     return res.status(401).json({

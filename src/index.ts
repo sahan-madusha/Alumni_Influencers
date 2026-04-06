@@ -5,6 +5,8 @@ import { prisma } from "./utils/prisma";
 import { userRoutes } from "./routes";
 import { errorHandler } from "./middlewares";
 import swaggerUi from "swagger-ui-express";
+import swaggerOutput from "./swagger.json";
+import { PORT } from "./config";
 
 const app: Application = express();
 
@@ -14,6 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/health", async (req, res) => {
+  // #swagger.tags = ['Health']
   try {
     await prisma.$queryRaw`SELECT 1`;
     res.json({
@@ -36,4 +39,6 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerOutput));
 
 app.use(errorHandler);
 
-export default app;
+app.listen(Number(PORT), "0.0.0.0", () => {
+  console.log(`Server is listening on 0.0.0.0:${PORT}`);
+});
