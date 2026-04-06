@@ -5,18 +5,53 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
-// =========================
-// USER
-// =========================
-// Status field mimics ENUM: "ACTIVE" | "INACTIVE" | "PENDING"
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
 model User {
-  id       String     @id @default(uuid())
-  email    String     @unique
+  id       String  @id @default(uuid())
+  email    String  @unique
   password String
   name     String?
-  status   String     @default("ACTIVE")
+  status   Status  @default(ACTIVE)
+
+  emailVerified      Boolean   @default(false)
+  verificationToken  String?
+  verificationExpiry DateTime?
+
+  resetToken       String?
+  resetTokenExpiry DateTime?
+
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
+  lastLoginAt         DateTime?
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+
+  profile Profile?
+}
+
+model Profile {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  firstName String
+  lastName  String
+  bio       String?
+  phone     String?
+  company   String?
+  position  String?
+  linkedin  String?
+  twitter   String?
+  github    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

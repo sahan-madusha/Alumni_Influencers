@@ -27,6 +27,7 @@ export const userModel = {
     },
   });
   },
+  
   findUserByEmail: async (email: string) => {
     return prisma.user.findUnique({
       where: {
