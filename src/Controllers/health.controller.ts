@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { prisma } from "../config/database";
+import { prisma } from "../utils/prisma";
 
 export class HealthController {
   static async check(req: Request, res: Response) {
