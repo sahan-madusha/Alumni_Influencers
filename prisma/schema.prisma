@@ -42,16 +42,49 @@ model Profile {
   userId String @unique
   user   User   @relation(fields: [userId], references: [id])
 
-  firstName String
-  lastName  String
-  bio       String?
-  phone     String?
-  company   String?
-  position  String?
-  linkedin  String?
-  twitter   String?
-  github    String?
+  firstName      String
+  lastName       String
+  bio            String?
+  phone          String?
+  company        String?
+  position       String?
+  linkedin       String?
+  twitter        String?
+  github         String?
+
+  Degrees        Degree[]
+  Employments    Employment[]
+  Certifications Certification[]
+  Licenses       License[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Degree {
+  id        String  @id @default(uuid())
+  name      String
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id])
+}
+
+model Employment {
+  id        String  @id @default(uuid())
+  name      String
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id])
+}
+
+model Certification {
+  id        String  @id @default(uuid())
+  name      String
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id])
+}
+
+model License {
+  id        String  @id @default(uuid())
+  name      String
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id])
 }
