@@ -6,10 +6,8 @@
     "version": "1.0.0"
   },
   "host": "localhost:5000",
-  "basePath": "/api/v1/user",
-  "schemes": [
-    "http"
-  ],
+  "basePath": "/api/v1",
+  "schemes": ["http"],
   "securityDefinitions": {
     "bearerAuth": {
       "type": "apiKey",
@@ -21,9 +19,7 @@
   "paths": {
     "/health": {
       "get": {
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "description": "",
         "responses": {
           "200": {
@@ -35,11 +31,9 @@
         }
       }
     },
-    "/": {
+    "/user/": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Retrieve a list of all users. Required authorization.",
         "responses": {
           "default": {
@@ -48,23 +42,10 @@
         }
       }
     },
-    "/register": {
+    "/user/register": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Register a new user.",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "User registration information",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/RegisterDTO"
-            }
-          }
-        ],
         "responses": {
           "default": {
             "description": ""
@@ -72,23 +53,10 @@
         }
       }
     },
-    "/login": {
+    "/user/login": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Login user and get JWT token.",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Login credentials",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/LoginDTO"
-            }
-          }
-        ],
         "responses": {
           "default": {
             "description": ""
@@ -96,11 +64,9 @@
         }
       }
     },
-    "/logout": {
+    "/user/logout": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Logout the authenticated user. Required authorization.",
         "responses": {
           "default": {
@@ -109,23 +75,10 @@
         }
       }
     },
-    "/email-verification": {
+    "/user/email-verification": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Verify email using the token received during registration.",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "User ID and verification token",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/VerifyEmailDTO"
-            }
-          }
-        ],
         "responses": {
           "default": {
             "description": ""
@@ -133,23 +86,10 @@
         }
       }
     },
-    "/password-reset-request": {
+    "/user/password-reset-request": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Request a password reset token via email.",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "User email",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ResetPasswordRequestDTO"
-            }
-          }
-        ],
         "responses": {
           "default": {
             "description": ""
@@ -157,21 +97,313 @@
         }
       }
     },
-    "/password-reset": {
+    "/user/password-reset": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Reset password using the received token.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/profile/": {
+      "get": {
+        "tags": ["Profile"],
+        "description": "Retrieve the authenticated user profile.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/profile/update": {
+      "patch": {
+        "tags": ["Profile"],
+        "description": "Update profile details.",
         "parameters": [
           {
             "name": "body",
             "in": "body",
-            "description": "Password reset information",
-            "required": true,
+            "description": "Profile data to update",
             "schema": {
-              "$ref": "#/definitions/ResetPasswordDTO"
+              "$ref": "#/definitions/UpdateProfileDTO"
             }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/profile/upload-picture": {
+      "post": {
+        "tags": ["Profile"],
+        "description": "Upload a profile picture. Max size 5MB.",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "profilePicture",
+            "in": "formData",
+            "type": "file",
+            "required": true,
+            "description": "The image file to upload"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/profile/degree": {
+      "post": {
+        "tags": ["Profile"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/DegreeDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/profile/degree/{id}": {
+      "patch": {
+        "tags": ["Profile"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/DegreeDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Profile"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/profile/employment": {
+      "post": {
+        "tags": ["Profile"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/EmploymentDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/profile/employment/{id}": {
+      "patch": {
+        "tags": ["Profile"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/EmploymentDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Profile"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/profile/certification": {
+      "post": {
+        "tags": ["Profile"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CertificationDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/profile/certification/{id}": {
+      "patch": {
+        "tags": ["Profile"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CertificationDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Profile"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/profile/license": {
+      "post": {
+        "tags": ["Profile"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/LicenseDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/profile/license/{id}": {
+      "patch": {
+        "tags": ["Profile"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/LicenseDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Profile"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
@@ -182,77 +414,7 @@
       }
     }
   },
-  "definitions": {
-    "LoginDTO": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string",
-          "example": "admin@test.com"
-        },
-        "password": {
-          "type": "string",
-          "example": "password123"
-        }
-      }
-    },
-    "RegisterDTO": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string",
-          "example": "user@test.com"
-        },
-        "password": {
-          "type": "string",
-          "example": "password123"
-        },
-        "name": {
-          "type": "string",
-          "example": "John Doe"
-        }
-      }
-    },
-    "VerifyEmailDTO": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "example": "uuid-here"
-        },
-        "token": {
-          "type": "string",
-          "example": "1234-5678"
-        }
-      }
-    },
-    "ResetPasswordRequestDTO": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string",
-          "example": "user@test.com"
-        }
-      }
-    },
-    "ResetPasswordDTO": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "example": "uuid-here"
-        },
-        "token": {
-          "type": "string",
-          "example": "1234-5678"
-        },
-        "password": {
-          "type": "string",
-          "example": "newPassword123"
-        }
-      }
-    }
-  },
+  "definitions": {},
   "security": [
     {
       "bearerAuth": []
