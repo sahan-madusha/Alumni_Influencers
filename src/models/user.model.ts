@@ -28,16 +28,9 @@ export const requestPasswordResetSchema = z.object({
   }),
 });
 
-export const verifyResetTokenSchema = z.object({
-  query: z.object({
-    id: z.string().uuid(),
-    token: z.string(),
-    password: z.string().min(6),
-  }),
-});
-
 export const resetPasswordSchema = z.object({
   body: z.object({
+    id: z.string().uuid(),
     token: z.string(),
     password: z.string().min(6),
   }),

@@ -6,7 +6,6 @@ import {
   loginUserSchema,
   verifyEmailSchema,
   requestPasswordResetSchema,
-  verifyResetTokenSchema,
   resetPasswordSchema,
 } from "../models";
 
@@ -25,15 +24,15 @@ router.post(
   validate(verifyEmailSchema),
   userController.verifyEmail,
 );
-router.get(
+router.post(
   "/password-reset-request",
   validate(requestPasswordResetSchema),
   userController.requestPasswordReset,
 );
 router.post(
   "/password-reset",
-  validate(verifyResetTokenSchema),
-  userController.verifyResetPassword,
+  validate(resetPasswordSchema),
+  userController.resetPassword,
 );
 
 export const userRoutes = router;

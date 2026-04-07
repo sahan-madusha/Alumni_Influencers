@@ -44,7 +44,7 @@ model Profile {
   user   User   @relation(fields: [userId], references: [id])
 
   firstName      String
-  lastName       String
+  lastName       String?
   bio            String?
   phone          String?
   company        String?
