@@ -1,14 +1,13 @@
 import { Router } from "express";
-import { protect } from "../middlewares/authMiddleware";
-import { userController } from "../controllers/user.controller";
+import { protect,validate } from "../middlewares";
+import { userController } from "../controllers";
+import { registerUserSchema, loginUserSchema, verifyEmailSchema } from "../models";
 
 const router = Router();
 
 router.get("/", protect, userController.getAllUsers);
-router.post("/register", userController.registerUser);
-router.post("/login", userController.loginUser);
-router.post("/email-verification", userController.verifyEmail);
-// router.post("/logout", protect, userController.logoutUser);
-// router.post("/password/reset", protect, userController.resetPassword);
+router.post("/register", validate(registerUserSchema), userController.registerUser);
+router.post("/login", validate(loginUserSchema), userController.loginUser);
+router.post("/email-verification", validate(verifyEmailSchema), userController.verifyEmail);
 
 export const userRoutes = router;
