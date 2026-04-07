@@ -33,5 +33,69 @@ export const updateProfileSchema = z.object({
   }),
 });
 
+export const degreeSchema = z.object({
+  body: z.object({
+    name: z.string().min(1),
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date().optional(),
+  }),
+});
+
+export const updateDegreeSchema = z.object({
+  body: z.object({
+    name: z.string().min(1).optional(),
+    startDate: z.coerce.date().optional(),
+    endDate: z.coerce.date().optional(),
+  }),
+});
+
+export const employmentSchema = z.object({
+  body: z.object({
+    name: z.string().min(1),
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date().optional(),
+  }),
+});
+
+export const updateEmploymentSchema = z.object({
+  body: z.object({
+    name: z.string().min(1).optional(),
+    startDate: z.coerce.date().optional(),
+    endDate: z.coerce.date().optional(),
+  }),
+});
+
+export const certificationSchema = z.object({
+  body: z.object({
+    name: z.string().min(1),
+    untilValide: z.coerce.date().optional(),
+  }),
+});
+
+export const updateCertificationSchema = z.object({
+  body: z.object({
+    name: z.string().min(1).optional(),
+    untilValide: z.coerce.date().optional(),
+  }),
+});
+
+export const licenseSchema = z.object({
+  body: z.object({
+    name: z.string().min(1),
+    untilValide: z.coerce.date().optional(),
+  }),
+});
+
+export const updateLicenseSchema = z.object({
+  body: z.object({
+    name: z.string().min(1).optional(),
+    untilValide: z.coerce.date().optional(),
+  }),
+});
+
 export type CreateProfileDTO = z.infer<typeof createProfileSchema>["body"];
 export type UpdateProfileDTO = z.infer<typeof updateProfileSchema>["body"];
+export type DegreeDTO = z.infer<typeof degreeSchema>["body"];
+export type EmploymentDTO = z.infer<typeof employmentSchema>["body"];
+export type CertificationDTO = z.infer<typeof certificationSchema>["body"];
+export type LicenseDTO = z.infer<typeof licenseSchema>["body"];
