@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { userModel } from "../models/user.model";
+import { userService } from "../service/user.service";
+import { CreateUserDTO } from "../models/user.model";
 
 export const userController = {
   getAllUsers: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const users = await userModel.findAllUsers();
+      const users = await userService.findAllUsers();
       res.json({
         success: true,
         data: users,
@@ -14,17 +15,39 @@ export const userController = {
     }
   },
 
-  registerUser: async (req: Request, res: Response, next: NextFunction) => {
+  registerUser: async (
+    req: Request<CreateUserDTO>,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const { email, password, name } = req.body;
-      
-      const userExists = await userModel.findUserByEmail(email);
-      if (userExists) {
-        throw new Error("User already exists");
+      const user = await userService.createUser({ email, password, name });
+
+      return res.status(201).json({
+        success: true,
+        data: user,
+        message: "User registered successfully",
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
+
+  loginUser: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, password } = req.body;
+
+      if (!email || !password) {
+        throw new Error("Please provide email and password");
       }
-      
-      const user = await userModel.saveUser({ email, password, name });
-      res.status(201).json({
+
+      const user = await userService.findUserByEmail(email);
+
+      return res.status(200).json({
         success: true,
         data: user,
       });

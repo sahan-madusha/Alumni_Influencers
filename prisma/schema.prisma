@@ -17,7 +17,7 @@ model User {
   email    String  @unique
   password String
   name     String?
-  status   Status  @default(ACTIVE)
+  status   Status  @default(PENDING)
 
   emailVerified      Boolean   @default(false)
   verificationToken  String?
@@ -51,7 +51,8 @@ model Profile {
   linkedin       String?
   twitter        String?
   github         String?
-
+  profilePicture String?
+  
   Degrees        Degree[]
   Employments    Employment[]
   Certifications Certification[]
