@@ -1,2 +1,2 @@
 export * from "./user.routes";
-// export * from "./profile.routs";
+export * from "./profile.routs";

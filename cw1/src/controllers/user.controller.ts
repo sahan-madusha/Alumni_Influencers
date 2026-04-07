@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { userService } from "../service/user.service";
+import { userService } from "../service";
 import {
   CreateUserDTO,
   VerifyEmailDTO,

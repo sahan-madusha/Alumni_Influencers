@@ -2,7 +2,7 @@ import express, { Application } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import { prisma } from "./utils/prisma";
-import { userRoutes } from "./routes";
+import { profileRoutes, userRoutes } from "./routes";
 import { errorHandler } from "./middlewares";
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "./swagger.json";
@@ -34,6 +34,7 @@ app.get("/health", async (req, res) => {
 });
 
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/profile", profileRoutes);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerOutput));
 

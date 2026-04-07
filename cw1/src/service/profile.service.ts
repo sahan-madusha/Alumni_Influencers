@@ -10,4 +10,11 @@ export const profileService = {
       },
     });
   },
+  getProfile: async (userId: string) => {
+    return prisma.profile.findUnique({
+      where: {
+        userId,
+      },
+    });
+  },
 };

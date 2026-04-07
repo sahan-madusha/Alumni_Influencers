@@ -111,8 +111,7 @@ export const userService = {
     });
 
     return {
-      verifiedUser,
-      profile,
+      verifiedUser
     };
   },
 
