@@ -1,9 +1,10 @@
 import { prisma } from "../utils/prisma";
 import { CreateUserDTO } from "../models/user.model";
-import { create } from "domain";
-import { ALLOWED_DOMAINS } from "../config";
 import { generateHashPassword } from "../utils/generateHashPassword";
 import { validateEmail } from "../utils/validateEmail";
+import { generateTocken } from "../utils/tockenGenerator";
+import bcrypt from "bcryptjs";
+import { Status } from "@prisma/client";
 
 export const userService = {
   createUser: async (data: CreateUserDTO) => {
@@ -24,16 +25,71 @@ export const userService = {
 
     const passwordEncrypted = await generateHashPassword(data.password);
 
-    return prisma.user.create({
+    const { token, expiresAt: tokenExpire } = generateTocken();
+
+    const tockenEncript = await generateHashPassword(token);
+
+    const user = await prisma.user.create({
       data: {
         email: data.email,
         password: passwordEncrypted,
         name: data.name,
+        verificationToken: tockenEncript,
+        verificationExpiry: tokenExpire,
       },
       select: {
         id: true,
         email: true,
         name: true,
+        verificationExpiry: true,
+      },
+    });
+
+    return {
+      ...user,
+      verificationToken: token,
+    };
+  },
+
+  verifyEmail: async (id: string, token: string) => {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!user || !user?.verificationExpiry || !user?.verificationToken) {
+      throw new Error("User not found");
+    }
+
+    const isTokenExpired = user.verificationExpiry < new Date();
+
+    if (isTokenExpired) {
+      throw new Error("Token expired");
+    }
+
+    const isTokenValid = await bcrypt.compare(token, user.verificationToken);
+
+    if (!isTokenValid) {
+      throw new Error("Invalid token");
+    }
+
+    return prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        status: Status.ACTIVE,
+        emailVerified: true,
+        verificationToken: null,
+        verificationExpiry: null,
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        status: true,
+        createdAt: true,
       },
     });
   },

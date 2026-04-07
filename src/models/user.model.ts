@@ -11,3 +11,8 @@ export interface UserDTO {
   status: string;
   createdAt: Date;
 }
+
+export interface VerifyEmailDTO {
+  id: string;
+  token: string;
+}
