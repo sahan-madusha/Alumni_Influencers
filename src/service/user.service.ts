@@ -1,5 +1,6 @@
 import { prisma } from "../utils/prisma";
-import { CreateUserDTO } from "../models/user.model";
+import { CreateUserDTO, LoginDTO, LoginResponseDTO } from "../models/user.model";
+import { generateToken } from "../utils/jwt.utils";
 import { generateHashPassword } from "../utils/generateHashPassword";
 import { validateEmail } from "../utils/validateEmail";
 import { generateTocken } from "../utils/tockenGenerator";
@@ -127,5 +128,40 @@ export const userService = {
         email,
       },
     });
+  },
+
+  loginUser: async (data: LoginDTO): Promise<LoginResponseDTO> => {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: data.email,
+      },
+    });
+
+    if (!user) {
+      throw new Error("Invalid email or password");
+    }
+
+    if (!user.emailVerified || user.status !== Status.ACTIVE) {
+      throw new Error("Please verify your email first");
+    }
+
+    const isPasswordValid = await bcrypt.compare(data.password, user.password);
+
+    if (!isPasswordValid) {
+      throw new Error("Invalid email or password");
+    }
+
+    const token = generateToken(user.id);
+
+    return {
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        status: user.status,
+        createdAt: user.createdAt,
+      },
+      token,
+    };
   },
 };

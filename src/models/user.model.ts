@@ -16,3 +16,13 @@ export interface VerifyEmailDTO {
   id: string;
   token: string;
 }
+
+export interface LoginDTO {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponseDTO {
+  user: UserDTO;
+  token: string;
+}
