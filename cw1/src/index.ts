@@ -1,4 +1,5 @@
 import express, { Application } from "express";
+import path from "path";
 import cors from "cors";
 import helmet from "helmet";
 import { prisma } from "./utils/prisma";
@@ -14,6 +15,8 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.get("/health", async (req, res) => {
   // #swagger.tags = ['Health']
