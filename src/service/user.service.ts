@@ -3,20 +3,20 @@ import {
   CreateUserDTO,
   LoginDTO,
   LoginResponseDTO,
-  RequestPasswordResetDTO,
-  ResetPasswordDTO,
 } from "../models/user.model";
-import { generateToken } from "../utils/jwt.utils";
-import crypto from "crypto";
-import { generateHashPassword } from "../utils/generateHashPassword";
-import { validateEmail } from "../utils/validateEmail";
-import { generateTocken } from "../utils/tockenGenerator";
+import {
+  generateToken,
+  generateHashPassword,
+  validateEmail,
+  generateTocken,
+} from "../utils";
 import bcrypt from "bcryptjs";
 import { Status } from "@prisma/client";
 import {
   ACCOUNT_LOCK_DURATION_MINUTES,
   MAX_FAILED_LOGIN_ATTEMPTS,
 } from "../config";
+import { profileService } from "./profile.service";
 
 export const userService = {
   createUser: async (data: CreateUserDTO) => {
@@ -86,7 +86,7 @@ export const userService = {
       throw new Error("Invalid token");
     }
 
-    return prisma.user.update({
+    const verifiedUser = await prisma.user.update({
       where: {
         id,
       },
@@ -104,6 +104,16 @@ export const userService = {
         createdAt: true,
       },
     });
+
+    const profile = await profileService.create({
+      userId: verifiedUser.id,
+      name: verifiedUser.name || "",
+    });
+
+    return {
+      verifiedUser,
+      profile,
+    };
   },
 
   findAllUsers: async () => {
