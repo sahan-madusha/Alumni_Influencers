@@ -28,6 +28,7 @@ model User {
 
   failedLoginAttempts Int       @default(0)
   lockedUntil         DateTime?
+  isLoggedIn          Boolean   @default(false)
   lastLoginAt         DateTime?
 
   createdAt DateTime  @default(now())
