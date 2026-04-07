@@ -11,28 +11,68 @@ import {
 
 const router = Router();
 
-router.get("/", protect, userController.getAllUsers);
+router.get(
+  "/",
+  protect,
+  userController.getAllUsers,
+  /* 
+    #swagger.tags = ['User']
+    #swagger.description = 'Retrieve a list of all users. Required authorization.'
+  */
+);
 router.post(
   "/register",
   validate(registerUserSchema),
   userController.registerUser,
+  /*  
+    #swagger.tags = ['User']
+    #swagger.description = 'Register a new user.'
+  */
 );
-router.post("/login", validate(loginUserSchema), userController.loginUser);
-router.post("/logout", protect, userController.logoutUser);
+router.post(
+  "/login",
+  validate(loginUserSchema),
+  userController.loginUser,
+  /*  
+    #swagger.tags = ['User']
+    #swagger.description = 'Login user and get JWT token.'
+  */
+);
+router.post(
+  "/logout",
+  protect,
+  userController.logoutUser,
+  /* 
+    #swagger.tags = ['User']
+    #swagger.description = 'Logout the authenticated user. Required authorization.'
+  */
+);
 router.post(
   "/email-verification",
   validate(verifyEmailSchema),
   userController.verifyEmail,
+  /*  
+    #swagger.tags = ['User']
+    #swagger.description = 'Verify email using the token received during registration.'
+  */
 );
 router.post(
   "/password-reset-request",
   validate(requestPasswordResetSchema),
   userController.requestPasswordReset,
+  /*  
+    #swagger.tags = ['User']
+    #swagger.description = 'Request a password reset token via email.'
+  */
 );
 router.post(
   "/password-reset",
   validate(resetPasswordSchema),
   userController.resetPassword,
+  /*  
+    #swagger.tags = ['User']
+    #swagger.description = 'Reset password using the received token.'
+  */
 );
 
 export const userRoutes = router;

@@ -1,13 +1,15 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "1.0.0",
     "title": "Alumni Influencers API",
-    "description": "API documentation for the Alumni Influencers API"
+    "description": "Comprehensive API documentation for the Alumni Influencers API",
+    "version": "1.0.0"
   },
   "host": "localhost:5000",
-  "basePath": "/",
-  "schemes": ["http"],
+  "basePath": "/api/v1/user",
+  "schemes": [
+    "http"
+  ],
   "securityDefinitions": {
     "bearerAuth": {
       "type": "apiKey",
@@ -19,7 +21,9 @@
   "paths": {
     "/health": {
       "get": {
-        "tags": ["Health"],
+        "tags": [
+          "Health"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -30,9 +34,225 @@
           }
         }
       }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Retrieve a list of all users. Required authorization.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Register a new user.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User registration information",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Login user and get JWT token.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Login credentials",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Logout the authenticated user. Required authorization.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/email-verification": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Verify email using the token received during registration.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User ID and verification token",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifyEmailDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/password-reset-request": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Request a password reset token via email.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User email",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ResetPasswordRequestDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/password-reset": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Reset password using the received token.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Password reset information",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ResetPasswordDTO"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
     }
   },
-  "definitions": {},
+  "definitions": {
+    "LoginDTO": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "admin@test.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "password123"
+        }
+      }
+    },
+    "RegisterDTO": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "user@test.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "password123"
+        },
+        "name": {
+          "type": "string",
+          "example": "John Doe"
+        }
+      }
+    },
+    "VerifyEmailDTO": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "uuid-here"
+        },
+        "token": {
+          "type": "string",
+          "example": "1234-5678"
+        }
+      }
+    },
+    "ResetPasswordRequestDTO": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "user@test.com"
+        }
+      }
+    },
+    "ResetPasswordDTO": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "uuid-here"
+        },
+        "token": {
+          "type": "string",
+          "example": "1234-5678"
+        },
+        "password": {
+          "type": "string",
+          "example": "newPassword123"
+        }
+      }
+    }
+  },
   "security": [
     {
       "bearerAuth": []
