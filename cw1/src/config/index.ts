@@ -19,3 +19,5 @@ export const ALLOWED_DOMAINS = ["iit.ac.lk"];
 export const TOKEN_EXPIRE_MINUTES = 10;
 export const MAX_FAILED_LOGIN_ATTEMPTS = 5;
 export const ACCOUNT_LOCK_DURATION_MINUTES = 10;
+export const RATE_LIMIT_WINDOW = 15 * 60 * 1000;
+export const WINNER_SELECTION_SCHEDULE = "0 6 * * *";
