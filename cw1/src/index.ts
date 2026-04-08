@@ -3,8 +3,9 @@ import path from "path";
 import cors from "cors";
 import helmet from "helmet";
 import { prisma } from "./utils/prisma";
-import { profileRoutes, userRoutes } from "./routes";
-import { errorHandler } from "./middlewares";
+import { profileRoutes, userRoutes, bidRoutes } from "./routes";
+import { errorHandler, globalLimiter } from "./middlewares";
+import { initScheduler } from "./utils/scheduler";
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "./swagger.json";
 import { PORT } from "./config";
@@ -15,6 +16,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(globalLimiter);
 
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
@@ -38,6 +40,7 @@ app.get("/health", async (req, res) => {
 
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/profile", profileRoutes);
+app.use("/api/v1/bid", bidRoutes);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerOutput));
 
@@ -45,4 +48,5 @@ app.use(errorHandler);
 
 app.listen(Number(PORT), "0.0.0.0", () => {
   console.log(`Server is listening on 0.0.0.0:${PORT}`);
+  initScheduler();
 });

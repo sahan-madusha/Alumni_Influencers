@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { protect, validate } from "../middlewares";
+import { protect, validate, authLimiter } from "../middlewares";
 import { userController } from "../controllers";
 import {
   registerUserSchema,
@@ -24,6 +24,7 @@ router.get(
 
 router.post(
   "/register",
+  authLimiter,
   validate(registerUserSchema),
   userController.registerUser,
   /*  
@@ -34,6 +35,7 @@ router.post(
 );
 router.post(
   "/login",
+  authLimiter,
   validate(loginUserSchema),
   userController.loginUser,
   /*  
@@ -64,6 +66,7 @@ router.post(
 );
 router.post(
   "/password-reset-request",
+  authLimiter,
   validate(requestPasswordResetSchema),
   userController.requestPasswordReset,
   /*  
@@ -74,6 +77,7 @@ router.post(
 );
 router.post(
   "/password-reset",
+  authLimiter,
   validate(resetPasswordSchema),
   userController.resetPassword,
   /*  
