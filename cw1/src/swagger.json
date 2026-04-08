@@ -468,7 +468,7 @@
         "tags": [
           "Bidding"
         ],
-        "description": "Place a new blind bid for the Alumni of the Day.",
+        "description": "Place a new bid for today.",
         "parameters": [
           {
             "name": "body",
@@ -493,7 +493,7 @@
         "tags": [
           "Bidding"
         ],
-        "description": "Update an existing active bid (Increase only).",
+        "description": "Update your active pending bid for today.",
         "parameters": [
           {
             "name": "body",
@@ -508,6 +508,17 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Bidding"
+        ],
+        "description": "Cancel your active pending bid for today.",
         "responses": {
           "200": {
             "description": "OK"
@@ -541,12 +552,38 @@
         }
       }
     },
-    "/trigger-selection": {
-      "post": {
+    "/history": {
+      "get": {
         "tags": [
           "Bidding"
         ],
-        "description": "DEBUG: Manually trigger the daily winner selection (midnight logic).",
+        "description": "View your personal bidding history (WIN, LOSS, PENDING).",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/alumni-of-the-day": {
+      "get": {
+        "tags": [
+          "Bidding"
+        ],
+        "description": "Retrieve the current Alumni of the Day (today\\'s featured winner).",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/tomorrow-slot": {
+      "get": {
+        "tags": [
+          "Bidding"
+        ],
+        "description": "Check the availability of tomorrow\\'s bidding slot.",
         "responses": {
           "200": {
             "description": "OK"

@@ -3,7 +3,7 @@ import { BidStatus } from "@prisma/client";
 import { notifyWinner, notifyLoser } from "../utils";
 
 export const bidService = {
-  getRemainingSlots: async (userId: string) => {
+  getRemainingLimit: async (userId: string) => {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { eventAttendee: true },
@@ -28,9 +28,9 @@ export const bidService = {
     return Math.max(0, limit - winCount);
   },
 
-  placeBid: async (userId: string, amount: number) => {
-    const slots = await bidService.getRemainingSlots(userId);
-    if (slots <= 0) {
+  createBid: async (userId: string, amount: number) => {
+    const limit = await bidService.getRemainingLimit(userId);
+    if (limit <= 0) {
       throw new Error("You have reached your monthly winning limit.");
     }
 
@@ -88,6 +88,70 @@ export const bidService = {
     });
   },
 
+  cancelBid: async (userId: string) => {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const existingBid = await prisma.bid.findFirst({
+      where: {
+        userId,
+        status: BidStatus.PENDING,
+        createdAt: { gte: startOfDay },
+      },
+    });
+
+    if (!existingBid) {
+      throw new Error("No active bid found for today to cancel.");
+    }
+
+    return prisma.bid.delete({
+      where: { id: existingBid.id },
+    });
+  },
+
+  getBidHistory: async (userId: string) => {
+    return prisma.bid.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+    });
+  },
+
+  getAlumniOfTheDay: async () => {
+    const profile = await prisma.profile.findFirst({
+      where: { isAlumniOfTheDay: true },
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    if (!profile) return null;
+
+    return {
+      name: profile.user.name || "Alumnus",
+      bio: profile.bio,
+      position: profile.position,
+      company: profile.company,
+      profilePicture: profile.profilePicture,
+    };
+  },
+
+  getTomorrowSlotStatus: async () => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    return {
+      date: tomorrow.toISOString().split("T")[0],
+      status: "Available",
+      description:
+        "Bidding is currently open for tomorrow's Alumni of the Day.",
+    };
+  },
+
   getBidStatus: async (userId: string) => {
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
@@ -126,7 +190,7 @@ export const bidService = {
     const startOfYesterday = new Date();
     startOfYesterday.setHours(startOfYesterday.getHours() - 24);
 
-    console.log(`[SCHEDULER] Running daily winner selection...`);
+    console.log(`Running daily winner selection...`);
 
     const winner = await prisma.bid.findFirst({
       where: { status: BidStatus.PENDING },
@@ -135,7 +199,7 @@ export const bidService = {
     });
 
     if (!winner) {
-      console.log("[SCHEDULER] No bids found for today.");
+      console.log("No bids found for today.");
       return;
     }
 
@@ -175,6 +239,6 @@ export const bidService = {
       await notifyLoser(loser.user.email, loser.user.name || "Alumnus");
     }
 
-    console.log(`[SCHEDULER] Winner selected: ${winner.user.email}`);
+    console.log(`Winner selected: ${winner.user.email}`);
   },
 };

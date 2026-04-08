@@ -2,14 +2,13 @@ import { Request, Response, NextFunction } from "express";
 import { bidService } from "../service/bid.service";
 
 export const bidController = {
-  placeBid: async (req: Request, res: Response, next: NextFunction) => {
-
+  createBid: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.user?.id;
       if (!userId) throw new Error("User not authenticated");
 
       const { amount } = req.body;
-      const bid = await bidService.placeBid(userId, amount);
+      const bid = await bidService.createBid(userId, amount);
 
       res.status(201).json({
         success: true,
@@ -22,7 +21,6 @@ export const bidController = {
   },
 
   updateBid: async (req: Request, res: Response, next: NextFunction) => {
-
     try {
       const userId = req.user?.id;
       if (!userId) throw new Error("User not authenticated");
@@ -34,6 +32,22 @@ export const bidController = {
         success: true,
         message: "Bid updated successfully",
         data: bid,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  cancelBid: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) throw new Error("User not authenticated");
+
+      await bidService.cancelBid(userId);
+
+      res.json({
+        success: true,
+        message: "Bid cancelled successfully",
       });
     } catch (error) {
       next(error);
@@ -56,28 +70,68 @@ export const bidController = {
     }
   },
 
-  getRemainingSlots: async (req: Request, res: Response, next: NextFunction) => {
+  getRemainingLimit: async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const userId = req.user?.id;
       if (!userId) throw new Error("User not authenticated");
 
-      const slots = await bidService.getRemainingSlots(userId);
+      const limit = await bidService.getRemainingLimit(userId);
 
       res.json({
         success: true,
-        data: { remainingSlots: slots },
+        data: { remainingLimit: limit },
       });
     } catch (error) {
       next(error);
     }
   },
 
-  triggerSelection: async (req: Request, res: Response, next: NextFunction) => {
+  getBidingHistory: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await bidService.processDailyWinner();
+      const userId = req.user?.id;
+      if (!userId) throw new Error("User not authenticated");
+
+      const history = await bidService.getBidHistory(userId);
+
       res.json({
         success: true,
-        message: "Daily winner selection processed successfully.",
+        data: history,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getAlumniOfTheDay: async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const alumni = await bidService.getAlumniOfTheDay();
+      res.json({
+        success: true,
+        data: alumni,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getTomorrowSlotStatus: async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const status = await bidService.getTomorrowSlotStatus();
+      res.json({
+        success: true,
+        data: status,
       });
     } catch (error) {
       next(error);

@@ -9,10 +9,10 @@ router.post(
   "/",
   protect,
   validate(placeBidSchema),
-  bidController.placeBid,
+  bidController.createBid,
   /* 
       #swagger.tags = ['Bidding']
-      #swagger.description = 'Place a new blind bid for the Alumni of the Day.'
+      #swagger.description = 'Place a new bid for today.'
     */
 );
 router.patch(
@@ -22,7 +22,17 @@ router.patch(
   bidController.updateBid,
   /* 
       #swagger.tags = ['Bidding']
-      #swagger.description = 'Update an existing active bid (Increase only).'
+      #swagger.description = 'Update your active pending bid for today.'
+    */
+);
+router.delete(
+  "/",
+  protect,
+  bidController.cancelBid,
+
+  /* 
+      #swagger.tags = ['Bidding']
+      #swagger.description = 'Cancel your active pending bid for today.'
     */
 );
 router.get(
@@ -35,21 +45,38 @@ router.get(
     */
 );
 router.get(
-  "/slots",
+  "/limit",
   protect,
-  bidController.getRemainingSlots,
+  bidController.getRemainingLimit,
   /* 
       #swagger.tags = ['Bidding']
       #swagger.description = 'Check how many times more you can win this month.'
     */
 );
-router.post(
-  "/trigger-selection",
+router.get(
+  "/history",
   protect,
-  bidController.triggerSelection,
+  bidController.getBidingHistory,
   /* 
       #swagger.tags = ['Bidding']
-      #swagger.description = 'DEBUG: Manually trigger the daily winner selection (midnight logic).'
+      #swagger.description = 'View your personal bidding history (WIN, LOSS, PENDING).'
+    */
+);
+
+router.get(
+  "/alumni-of-the-day",
+  bidController.getAlumniOfTheDay,
+  /* 
+      #swagger.tags = ['Bidding']
+      #swagger.description = 'Retrieve the current Alumni of the Day (today\'s featured winner).'
+    */
+);
+router.get(
+  "/tomorrow-slot",
+  bidController.getTomorrowSlotStatus,
+  /* 
+      #swagger.tags = ['Bidding']
+      #swagger.description = 'Check the availability of tomorrow\'s bidding slot.'
     */
 );
 

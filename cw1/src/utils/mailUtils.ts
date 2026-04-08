@@ -1,6 +1,6 @@
 export const sendEmail = async (to: string, subject: string, body: string) => {
-  console.log(`[EMAIL SENT] To: ${to} | Subject: ${subject}`);
-  console.log(`[BODY]: ${body}`);
+  console.log(`Email sent To: ${to} | Subject: ${subject}`);
+  console.log(`BODY: ${body}`);
   return true;
 };
 
