@@ -12,6 +12,12 @@ enum Status {
   PENDING
 }
 
+enum BidStatus {
+  PENDING
+  WIN
+  LOSS
+}
+
 model User {
   id       String  @id @default(uuid())
   email    String  @unique
@@ -35,7 +41,10 @@ model User {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
+  eventAttendee Boolean @default(false)
+
   profile Profile?
+  bids    Bid[]
 }
 
 model Profile {
@@ -53,6 +62,8 @@ model Profile {
   twitter        String?
   github         String?
   profilePicture String?
+
+  isAlumniOfTheDay Boolean @default(false)
 
   Degrees        Degree[]
   Employments    Employment[]
@@ -95,4 +106,14 @@ model License {
   untilValide DateTime?
   profileId   String
   profile     Profile   @relation(fields: [profileId], references: [id])
+}
+
+model Bid {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  amount    Float
+  status    BidStatus @default(PENDING)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
