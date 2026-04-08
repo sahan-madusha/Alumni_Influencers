@@ -1,8 +1,11 @@
 import { z } from "zod";
+import { validateEmail } from "../utils";
 
 export const registerUserSchema = z.object({
   body: z.object({
-    email: z.string().email(),
+    email: z.string().email().refine(validateEmail, {
+      message: "Only IIT emails are allowed",
+    }),
     password: z.string().min(6),
     name: z.string(),
   }),
@@ -24,7 +27,9 @@ export const verifyEmailSchema = z.object({
 
 export const requestPasswordResetSchema = z.object({
   body: z.object({
-    email: z.string().email(),
+    email: z.string().email().refine(validateEmail, {
+      message: "Only IIT emails are allowed",
+    }),
   }),
 });
 

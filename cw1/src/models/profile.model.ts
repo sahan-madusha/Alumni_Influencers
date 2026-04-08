@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { validatePhone } from "../utils";
 
 export const createProfileSchema = z.object({
   body: z.object({
@@ -23,7 +24,13 @@ export const updateProfileSchema = z.object({
     firstName: z.string().min(1, "First name must be at least 1 character long").optional(),
     lastName: z.string().optional(),
     bio: z.string().max(500, "Bio must be less than 500 characters").optional(),
-    phone: z.string().optional(),
+    phone: z
+      .string()
+      .optional()
+      .refine((val) => !val || validatePhone(val), {
+        message: "Invalid contact number format",
+      })
+      .or(z.literal("")),
     company: z.string().optional(),
     position: z.string().optional(),
     linkedin: trimUrlSchema,
