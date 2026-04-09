@@ -9,6 +9,8 @@ import {
   generateHashPassword,
   validateEmail,
   generateTocken,
+  sendVerificationEmail,
+  sendPasswordResetEmail,
 } from "../utils";
 import bcrypt from "bcryptjs";
 import { Status } from "@prisma/client";
@@ -56,6 +58,8 @@ export const userService = {
         verificationExpiry: true,
       },
     });
+
+    await sendVerificationEmail(user.email, user?.name, token);
 
     return {
       ...user,
@@ -105,7 +109,7 @@ export const userService = {
       },
     });
 
-    const profile = await profileService.create({
+    await profileService.create({
       userId: verifiedUser.id,
       name: verifiedUser.name || "",
     });
@@ -257,6 +261,8 @@ export const userService = {
         resetTokenExpiry: tokenExpire,
       },
     });
+
+    await sendPasswordResetEmail(user.email, user?.name, token);
 
     return {
       token,
