@@ -5,3 +5,4 @@ export * from "./validateEmail";
 export * from "./validatePhone";
 export * from "./prisma";
 export * from "./mailUtils";
+export * from "./validatePassword";
