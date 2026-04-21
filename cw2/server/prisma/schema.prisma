@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
+enum BidStatus {
+  PENDING
+  WIN
+  LOSS
+}
+
+model User {
+  id       String  @id @default(uuid())
+  email    String  @unique
+  password String
+  name     String?
+  status   Status  @default(PENDING)
+
+  emailVerified      Boolean   @default(false)
+  verificationToken  String?
+  verificationExpiry DateTime?
+
+  resetToken       String?
+  resetTokenExpiry DateTime?
+
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
+  isLoggedIn          Boolean   @default(false)
+  lastLoginAt         DateTime?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  eventAttendee Boolean @default(false)
+
+  profile Profile?
+  bids    Bid[]
+}
+
+model Profile {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  firstName      String
+  lastName       String?
+  bio            String?
+  phone          String?
+  company        String?
+  position       String?
+  linkedin       String?
+  twitter        String?
+  github         String?
+  profilePicture String?
+
+  isAlumniOfTheDay Boolean @default(false)
+
+  Degrees        Degree[]
+  Employments    Employment[]
+  Certifications Certification[]
+  Licenses       License[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Degree {
+  id        String    @id @default(uuid())
+  name      String
+  profileId String
+  startDate DateTime
+  endDate   DateTime?
+  profile   Profile   @relation(fields: [profileId], references: [id])
+}
+
+model Employment {
+  id        String    @id @default(uuid())
+  name      String
+  startDate DateTime
+  endDate   DateTime?
+  profileId String
+  profile   Profile   @relation(fields: [profileId], references: [id])
+}
+
+model Certification {
+  id          String    @id @default(uuid())
+  name        String
+  untilValide DateTime?
+  profileId   String
+  profile     Profile   @relation(fields: [profileId], references: [id])
+}
+
+model License {
+  id          String    @id @default(uuid())
+  name        String
+  untilValide DateTime?
+  profileId   String
+  profile     Profile   @relation(fields: [profileId], references: [id])
+}
+
+model Bid {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  amount    Float
+  status    BidStatus @default(PENDING)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
