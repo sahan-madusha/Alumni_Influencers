@@ -3,7 +3,7 @@ import path from "path";
 import cors from "cors";
 import helmet from "helmet";
 import { prisma } from "./utils/prisma";
-import { profileRoutes, userRoutes, bidRoutes } from "./routes";
+import { profileRoutes, userRoutes, bidRoutes, dashboardRoutes } from "./routes";
 import { errorHandler, globalLimiter } from "./middlewares";
 import { initScheduler } from "./utils/scheduler";
 import swaggerUi from "swagger-ui-express";
@@ -19,6 +19,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(globalLimiter);
 
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 app.get("/health", async (req, res) => {
   // #swagger.tags = ['Health']
@@ -43,6 +46,9 @@ app.use("/api/v1/profile", profileRoutes);
 app.use("/api/v1/bid", bidRoutes);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerOutput));
+
+//View
+app.use("/dashboard", dashboardRoutes);
 
 app.use(errorHandler);
 
