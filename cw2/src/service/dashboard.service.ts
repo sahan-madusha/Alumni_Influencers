@@ -81,7 +81,7 @@ export const dashboardService = {
 
     analytics.jobTitles = Object.fromEntries(Object.entries(analytics.jobTitles).sort((a, b) => (b[1] as any) - (a[1] as any)).slice(0, 5));
     analytics.topEmployers = Object.fromEntries(Object.entries(analytics.topEmployers).sort((a, b) => (b[1] as any) - (a[1] as any)).slice(0, 5));
-    analytics.skillsGap = Object.fromEntries(Object.entries(analytics.skillsGap).sort((a, b) => (b[1] as any) - (a[1] as any)).slice(0, 8));
+    analytics.skillsGap = Object.fromEntries(Object.entries(analytics.skillsGap).sort((a, b) => (b[1] as any) - (a[1] as any)).slice(0, 15));
 
     return analytics;
   }

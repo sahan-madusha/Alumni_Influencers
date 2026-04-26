@@ -4,30 +4,56 @@ import { generateHashPassword } from "../utils/generateHashPassword";
 import { Role, Status } from "@prisma/client";
 
 async function seed() {
-  console.log("Starting rich seeding...");
+  console.log("Starting highly diverse seeding...");
   const password = await generateHashPassword("Password123!");
 
-  const industries = ["Technology", "Finance", "Healthcare", "Education", "Manufacturing", "Telecommunications"];
-  const companies = ["Google", "Microsoft", "Amazon", "WSO2", "IFS", "Virtusa", "Pearson", "Dialog"];
+  const industries = [
+    "Technology", "Finance", "Healthcare", "Education", "Manufacturing", 
+    "Telecommunications", "E-commerce", "Energy", "Automotive", "Aerospace"
+  ];
+  
+  const companies = [
+    "Google", "Microsoft", "Amazon", "WSO2", "IFS", "Virtusa", "Pearson", "Dialog",
+    "Tesla", "SpaceX", "Apple", "Netflix", "Meta", "Oracle", "IBM", "SAP"
+  ];
+  
   const positions = [
     "Software Engineer", "Data Scientist", "Product Manager", "UX Designer", 
     "DevOps Engineer", "Solutions Architect", "Business Analyst", "Marketing Lead",
-    "QA Automation Engineer", "Full Stack Developer", "Cloud Consultant", "Agile Coach"
+    "QA Automation Engineer", "Full Stack Developer", "Cloud Consultant", "Agile Coach",
+    "Machine Learning Engineer", "Cybersecurity Analyst", "Database Admin", "CTO",
+    "Product Owner", "Scrum Master", "Systems Administrator", "Frontend Architect"
   ];
-  const countries = ["Sri Lanka", "United Kingdom", "Australia", "United States", "Singapore", "Germany", "Canada"];
-  const certifications = [
+  
+  const countries = [
+    "Sri Lanka", "United Kingdom", "Australia", "United States", "Singapore", 
+    "Germany", "Canada", "Japan", "France", "Netherlands", "United Arab Emirates"
+  ];
+  
+  const allSkills = [
     "AWS Certified Solutions Architect", "Professional Scrum Master (PSM I)", "Google Cloud Professional", 
     "Azure Fundamentals", "Certified Kubernetes Administrator (CKA)", "PMP Certification",
-    "CompTIA Security+", "Meta Front-End Developer", "IBM Data Science", "Agile Certified Practitioner"
+    "CompTIA Security+", "Meta Front-End Developer", "IBM Data Science", "Agile Certified Practitioner",
+    "Docker Certified Associate", "Terraform Associate", "Cisco CCNA", "Salesforce Administrator",
+    "React Native Expert", "TensorFlow Developer", "Certified Ethical Hacker (CEH)", "ITIL Foundation",
+    "Google Analytics Individual Qualification", "Microsoft Certified: Azure Data Scientist",
+    "Oracle Certified Professional", "Prince2 Foundation", "Six Sigma Green Belt", "Lean Management",
+    "Tableau Desktop Specialist", "Alteryx Designer Core", "Unity Certified Developer",
+    "Adobe Certified Professional", "ISTQB Foundation", "CompTIA Network+"
   ];
 
-  for (let i = 1; i <= 50; i++) {
-    const email = `alumni${i}@iit.ac.lk`;
-    const name = `Alumni ${i}`;
+  for (let i = 1; i <= 60; i++) {
+    const email = `alumni_ext${i}@iit.ac.lk`;
+    const name = `Professional Alumni ${i}`;
     
-    // Randomize some dates for cloud growth chart
     const createdAt = new Date();
-    createdAt.setFullYear(2021 + Math.floor(Math.random() * 6)); // 2021 to 2026
+    createdAt.setFullYear(2021 + Math.floor(Math.random() * 6));
+
+    // Select 3 to 6 random skills for each user
+    const numSkills = 3 + Math.floor(Math.random() * 4);
+    const selectedSkills = [...allSkills]
+      .sort(() => 0.5 - Math.random())
+      .slice(0, numSkills);
 
     try {
       await prisma.user.upsert({
@@ -44,28 +70,25 @@ async function seed() {
           profile: {
             create: {
               firstName: "Alumni",
-              lastName: `${i}`,
-              bio: `Expert in ${industries[i % industries.length]} with experience in ${positions[i % positions.length]}.`,
-              industrySector: industries[i % industries.length],
-              company: companies[i % companies.length],
-              position: positions[i % positions.length],
-              country: countries[i % countries.length],
+              lastName: `Expert ${i}`,
+              bio: `Seasoned professional in ${industries[i % industries.length]} with a focus on ${selectedSkills[0]}.`,
+              industrySector: industries[Math.floor(Math.random() * industries.length)],
+              company: companies[Math.floor(Math.random() * companies.length)],
+              position: positions[Math.floor(Math.random() * positions.length)],
+              country: countries[Math.floor(Math.random() * countries.length)],
               Certifications: {
-                create: [
-                  { name: certifications[i % certifications.length] },
-                  { name: certifications[(i + 5) % certifications.length] }
-                ]
+                create: selectedSkills.map(skill => ({ name: skill }))
               }
             }
           }
         }
       });
-      if (i % 10 === 0) console.log(`Created ${i} users...`);
+      if (i % 10 === 0) console.log(`Created ${i} diverse profiles...`);
     } catch (err) {
       console.error(`Failed to create user ${email}:`, err);
     }
   }
-  console.log("Rich seeding completed successfully.");
+  console.log("Highly diverse seeding completed successfully.");
 }
 
 seed()
