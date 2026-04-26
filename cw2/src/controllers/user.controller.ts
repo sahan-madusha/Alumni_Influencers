@@ -8,6 +8,8 @@ import {
   ResetPasswordDTO,
 } from "../models/user.model";
 
+import { Role } from "@prisma/client";
+
 export const userController = {
   getAllUsers: async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -27,8 +29,13 @@ export const userController = {
     next: NextFunction,
   ) => {
     try {
-      const { email, password, name } = req.body;
-      const user = await userService.createUser({ email, password, name });
+      const { email, password, name, role } = req.body;
+      const user = await userService.createUser({
+        email,
+        password,
+        name,
+        role: role || Role.ALUMNI,
+      });
 
       return res.status(201).json({
         success: true,
@@ -146,6 +153,36 @@ export const userController = {
       return res.status(200).json({
         success: true,
         message: "Password has been reset successfully",
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
+  renderLogin: async (req: Request, res: Response) => {
+    res.render("login");
+  },
+
+  renderRegister: async (req: Request, res: Response) => {
+    res.render("register");
+  },
+
+  registerStaff: async (req: Request, res: Response) => {
+    try {
+      const { email, password, name } = req.body;
+      const user = await userService.createUser({
+        email,
+        password,
+        name,
+        role: Role.STAFF,
+      });
+
+      return res.status(201).json({
+        success: true,
+        data: user,
+        message: "Staff registered successfully. Please verify your email",
       });
     } catch (error: any) {
       return res.status(400).json({

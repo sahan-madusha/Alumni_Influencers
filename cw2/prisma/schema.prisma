@@ -12,6 +12,11 @@ enum Status {
   PENDING
 }
 
+enum Role {
+  ALUMNI
+  STAFF
+}
+
 enum BidStatus {
   PENDING
   WIN
@@ -24,6 +29,7 @@ model User {
   password String
   name     String?
   status   Status  @default(PENDING)
+  role     Role    @default(ALUMNI)
 
   emailVerified      Boolean   @default(false)
   verificationToken  String?
@@ -64,6 +70,7 @@ model Profile {
   profilePicture String?
 
   isAlumniOfTheDay Boolean @default(false)
+  industrySector   String?
 
   Degrees        Degree[]
   Employments    Employment[]
@@ -116,4 +123,13 @@ model Bid {
   status    BidStatus @default(PENDING)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+}
+
+model ApiKey {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  name      String
+  scopes    String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -1,14 +1,27 @@
 import { z } from "zod";
 import { validateEmail, validatePassword } from "../utils";
+import { Role } from "@prisma/client";
 
 export const registerUserSchema = z.object({
   body: z.object({
     email: z.string().email().refine(validateEmail, {
       message: "Only IIT emails are allowed",
     }),
-    password: z.string().min(8).refine(validatePassword, {
-      message:
-        "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+    password: z.string().min(4).refine(validatePassword, {
+      message: "Password must be at least 4 characters long",
+    }),
+    name: z.string(),
+    role: z.nativeEnum(Role).optional().default(Role.ALUMNI),
+  }),
+});
+
+export const registerStaffSchema = z.object({
+  body: z.object({
+    email: z.string().email().refine(validateEmail, {
+      message: "Only IIT emails are allowed for staff registration",
+    }),
+    password: z.string().min(4).refine(validatePassword, {
+      message: "Password must be at least 4 characters long",
     }),
     name: z.string(),
   }),
@@ -40,14 +53,15 @@ export const resetPasswordSchema = z.object({
   body: z.object({
     id: z.string().uuid(),
     token: z.string(),
-    password: z.string().min(8).refine(validatePassword, {
-      message:
-        "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+    password: z.string().min(4).refine(validatePassword, {
+      message: "Password must be at least 4 characters long",
     }),
   }),
 });
 
-export type CreateUserDTO = z.infer<typeof registerUserSchema>["body"];
+export type CreateUserDTO = z.infer<typeof registerUserSchema>["body"] & {
+  role?: Role;
+};
 export type LoginDTO = z.infer<typeof loginUserSchema>["body"];
 export type VerifyEmailDTO = z.infer<typeof verifyEmailSchema>["body"];
 export type RequestPasswordResetDTO = z.infer<
@@ -60,6 +74,7 @@ export interface UserDTO {
   email: string;
   name?: string | null;
   status: string;
+  role: Role;
   createdAt: Date;
 }
 

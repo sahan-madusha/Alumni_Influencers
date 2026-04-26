@@ -3,7 +3,7 @@ import path from "path";
 import cors from "cors";
 import helmet from "helmet";
 import { prisma } from "./utils/prisma";
-import { profileRoutes, userRoutes, bidRoutes, dashboardRoutes } from "./routes";
+import { profileRoutes, userRoutes, bidRoutes, dashboardRoutes, loginRoutes } from "./routes";
 import { errorHandler, globalLimiter } from "./middlewares";
 import { initScheduler } from "./utils/scheduler";
 import swaggerUi from "swagger-ui-express";
@@ -49,6 +49,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerOutput));
 
 //View
 app.use("/dashboard", dashboardRoutes);
+app.use("/", loginRoutes );
 
 app.use(errorHandler);
 

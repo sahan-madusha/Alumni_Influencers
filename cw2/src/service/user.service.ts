@@ -13,7 +13,7 @@ import {
   sendPasswordResetEmail,
 } from "../utils";
 import bcrypt from "bcryptjs";
-import { Status } from "@prisma/client";
+import { Role, Status } from "@prisma/client";
 import {
   ACCOUNT_LOCK_DURATION_MINUTES,
   MAX_FAILED_LOGIN_ATTEMPTS,
@@ -48,6 +48,7 @@ export const userService = {
         email: data.email,
         password: passwordEncrypted,
         name: data.name,
+        role: data.role || Role.ALUMNI,
         verificationToken: tockenEncript,
         verificationExpiry: tokenExpire,
       },
@@ -55,6 +56,7 @@ export const userService = {
         id: true,
         email: true,
         name: true,
+        role: true,
         verificationExpiry: true,
       },
     });
@@ -105,6 +107,7 @@ export const userService = {
         email: true,
         name: true,
         status: true,
+        role: true,
         createdAt: true,
       },
     });
@@ -126,6 +129,7 @@ export const userService = {
         email: true,
         name: true,
         status: true,
+        role: true,
         createdAt: true,
       },
     });
@@ -167,6 +171,10 @@ export const userService = {
 
     if (!user.emailVerified || user.status !== Status.ACTIVE) {
       throw new Error("Please verify your email first");
+    }
+
+    if (user.role !== Role.STAFF) {
+      throw new Error("Access denied. Only university staff can access the analytics dashboard.");
     }
 
     if (user.lockedUntil && user.lockedUntil > new Date()) {
@@ -219,6 +227,7 @@ export const userService = {
         email: updatedUser.email,
         name: updatedUser.name,
         status: updatedUser.status,
+        role: updatedUser.role,
         createdAt: updatedUser.createdAt,
       },
       token,

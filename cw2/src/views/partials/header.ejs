@@ -1,6 +1,24 @@
 <nav class="navbar navbar-light bg-white border-bottom mb-4">
-    <div class="container">
-        <span class="navbar-brand h1 mb-0">Alumni Influencers</span>
-        <span class="text-muted small"><%= new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %></span>
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <span class="navbar-brand h1 mb-0">Alumni Influencers</span>
+            <span class="text-muted small ms-2 d-none d-md-inline"><%= new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %></span>
+        </div>
+        <div id="authButtons">
+            <button onclick="logout()" class="btn btn-outline-danger btn-sm fw-bold px-3" style="border-radius: 8px;">Sign Out</button>
+        </div>
     </div>
 </nav>
+
+<script>
+    function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/api/v1/user/login';
+    }
+    
+    // Hide logout button if not logged in (on login page)
+    if (window.location.pathname === '/api/v1/user/login') {
+        document.getElementById('authButtons').style.display = 'none';
+    }
+</script>
