@@ -10,18 +10,30 @@
       }
     </script>
 
-    <div class="container py-4">
-      <div class="d-flex justify-content-between align-items-center mb-5">
+    <main class="container py-5 mt-5" id="dashboardContent">
+      <div class="d-flex justify-content-between align-items-center">
         <div>
           <h1 class="fw-bold mb-1">University Analytics Dashboard</h1>
           <p class="text-muted">
             Real-time intelligence from alumni professional profiles
           </p>
         </div>
-        <div class="text-end">
-          <div class="h3 fw-bold text-primary mb-0"><%= profiles.length %></div>
-          <div class="text-muted small text-uppercase fw-bold">
-            Total Alumni Tracked
+        <div class="text-end d-flex align-items-center gap-3">
+          <div class="dropdown">
+            <button class="btn btn-outline-primary dropdown-toggle fw-bold" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 12px">
+              <i class="bi bi-download me-2"></i>Export Report
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="exportDropdown" style="border-radius: 12px">
+              <li><a class="dropdown-item py-2" href="#" id="btnExportCSV"><i class="bi bi-file-earmark-spreadsheet me-2 text-success"></i>Export to CSV</a></li>
+              <li><a class="dropdown-item py-2" href="#" id="btnDownloadPDF"><i class="bi bi-file-earmark-pdf me-2 text-danger"></i>Download PDF Report</a></li>
+            </ul>
+          </div>
+          <div class="vr mx-2"></div>
+          <div>
+            <div class="h3 fw-bold text-primary mb-0"><%= profiles.length %></div>
+            <div class="text-muted small text-uppercase fw-bold">
+              Total Alumni Tracked
+            </div>
           </div>
         </div>
       </div>
@@ -30,9 +42,12 @@
         <!-- 1. Curriculum Skills Gap -->
         <div class="col-md-6">
           <div class="card p-4 h-100 shadow-sm border-0">
-            <h6 class="fw-bold mb-3">
-              <i class="bi bi-mortarboard-fill me-2"></i>Curriculum Skills Gap
-            </h6>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="fw-bold mb-0">
+                <i class="bi bi-mortarboard-fill me-2"></i>Curriculum Skills Gap
+              </h6>
+              <button class="btn btn-link btn-sm p-0 text-muted btn-download-chart" data-chart="skillsGapChart" data-filename="skills_gap.png"><i class="bi bi-camera"></i></button>
+            </div>
             <canvas id="skillsGapChart"></canvas>
           </div>
         </div>
@@ -40,10 +55,12 @@
         <!-- 2. Employment by Industry Sector -->
         <div class="col-md-6">
           <div class="card p-4 h-100 shadow-sm border-0">
-            <h6 class="fw-bold mb-3">
-              <i class="bi bi-briefcase-fill me-2"></i>Industry Sector
-              Distribution
-            </h6>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="fw-bold mb-0">
+                <i class="bi bi-briefcase-fill me-2"></i>Industry Sector Distribution
+              </h6>
+              <button class="btn btn-link btn-sm p-0 text-muted btn-download-chart" data-chart="sectorChart" data-filename="industry_distribution.png"><i class="bi bi-camera"></i></button>
+            </div>
             <canvas id="sectorChart"></canvas>
           </div>
         </div>
@@ -51,9 +68,12 @@
         <!-- 3. Top 5 Job Titles -->
         <div class="col-md-6">
           <div class="card p-4 h-100 shadow-sm border-0">
-            <h6 class="fw-bold mb-3">
-              <i class="bi bi-person-badge-fill me-2"></i>Top 5 Job Titles
-            </h6>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="fw-bold mb-0">
+                <i class="bi bi-person-badge-fill me-2"></i>Top 5 Job Titles
+              </h6>
+              <button class="btn btn-link btn-sm p-0 text-muted btn-download-chart" data-chart="jobTitlesChart" data-filename="job_titles.png"><i class="bi bi-camera"></i></button>
+            </div>
             <canvas id="jobTitlesChart"></canvas>
           </div>
         </div>
@@ -61,10 +81,12 @@
         <!-- 4. Cloud Growth -->
         <div class="col-md-6">
           <div class="card p-4 h-100 shadow-sm border-0">
-            <h6 class="fw-bold mb-3">
-              <i class="bi bi-cloud-arrow-up-fill me-2"></i>Industry Demand:
-              Cloud Growth
-            </h6>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="fw-bold mb-0">
+                <i class="bi bi-cloud-arrow-up-fill me-2"></i>Industry Demand: Cloud Growth
+              </h6>
+              <button class="btn btn-link btn-sm p-0 text-muted btn-download-chart" data-chart="cloudGrowthChart" data-filename="cloud_growth.png"><i class="bi bi-camera"></i></button>
+            </div>
             <canvas id="cloudGrowthChart"></canvas>
           </div>
         </div>
@@ -72,9 +94,12 @@
         <!-- 5. Geographic Distribution -->
         <div class="col-md-6">
           <div class="card p-4 h-100 shadow-sm border-0">
-            <h6 class="fw-bold mb-3">
-              <i class="bi bi-geo-alt-fill me-2"></i>Geographic Distribution
-            </h6>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="fw-bold mb-0">
+                <i class="bi bi-geo-alt-fill me-2"></i>Geographic Distribution
+              </h6>
+              <button class="btn btn-link btn-sm p-0 text-muted btn-download-chart" data-chart="geoChart" data-filename="geo_distribution.png"><i class="bi bi-camera"></i></button>
+            </div>
             <canvas id="geoChart"></canvas>
           </div>
         </div>
@@ -82,10 +107,12 @@
         <!-- 6. Agile/Scrum Trends -->
         <div class="col-md-6">
           <div class="card p-4 h-100 shadow-sm border-0">
-            <h6 class="fw-bold mb-3">
-              <i class="bi bi-arrow-repeat me-2"></i>Professional Development:
-              Agile/Scrum
-            </h6>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="fw-bold mb-0">
+                <i class="bi bi-arrow-repeat me-2"></i>Professional Development: Agile/Scrum
+              </h6>
+              <button class="btn btn-link btn-sm p-0 text-muted btn-download-chart" data-chart="agileScrumChart" data-filename="agile_scrum.png"><i class="bi bi-camera"></i></button>
+            </div>
             <canvas id="agileScrumChart"></canvas>
           </div>
         </div>
@@ -93,9 +120,12 @@
         <!-- 7. Top Employers -->
         <div class="col-md-12">
           <div class="card p-4 h-100 shadow-sm border-0">
-            <h6 class="fw-bold mb-3">
-              <i class="bi bi-building me-2"></i>Top Alumni Employers
-            </h6>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="fw-bold mb-0">
+                <i class="bi bi-building me-2"></i>Top Alumni Employers
+              </h6>
+              <button class="btn btn-link btn-sm p-0 text-muted btn-download-chart" data-chart="employerChart" data-filename="top_employers.png"><i class="bi bi-camera"></i></button>
+            </div>
             <canvas id="employerChart" style="max-height: 300px"></canvas>
           </div>
         </div>
@@ -103,9 +133,12 @@
         <!-- 8. Emerging Career Pathways -->
         <div class="col-md-12">
           <div class="card p-4 h-100 shadow-sm border-0">
-            <h6 class="fw-bold mb-3">
-              <i class="bi bi-compass-fill me-2"></i>Emerging Career Pathways
-            </h6>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="fw-bold mb-0">
+                <i class="bi bi-compass-fill me-2"></i>Emerging Career Pathways
+              </h6>
+              <button class="btn btn-link btn-sm p-0 text-muted btn-download-chart" data-chart="pathwayChart" data-filename="career_pathways.png"><i class="bi bi-camera"></i></button>
+            </div>
             <div style="max-width: 500px; margin: auto">
               <canvas id="pathwayChart"></canvas>
             </div>
@@ -115,6 +148,9 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
       const analytics = <%- JSON.stringify(analytics) %>;
       const colors = ['#6366f1', '#22d3ee', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6', '#ec4899', '#3b82f6'];
@@ -229,6 +265,75 @@
                   pointBackgroundColor: '#8b5cf6'
               }]
           }
+      });
+
+      document.getElementById('btnExportCSV').addEventListener('click', function(e) {
+        e.preventDefault();
+        let csvContent = "Category,Value\n";
+        csvContent += "\nIndustry Sectors\n";
+        Object.entries(analytics.industrySector).forEach(([k, v]) => csvContent += `"${k}",${v}\n`);
+        csvContent += "\nTop Job Titles\n";
+        Object.entries(analytics.jobTitles).forEach(([k, v]) => csvContent += `"${k}",${v}\n`);
+        csvContent += "\nTop Employers\n";
+        Object.entries(analytics.topEmployers).forEach(([k, v]) => csvContent += `"${k}",${v}\n`);
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", "alumni_analytics_report.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+
+      document.getElementById('btnDownloadPDF').addEventListener('click', function(e) {
+        e.preventDefault();
+        const element = document.getElementById("dashboardContent");
+        if (!element) {
+            alert("Dashboard content not found!");
+            return;
+        }
+
+        const buttons = document.querySelectorAll('.btn-link, .dropdown');
+        buttons.forEach(btn => btn.style.display = 'none');
+
+        const opt = {
+          margin: [10, 10],
+          filename: 'alumni_analytics_report.pdf',
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { 
+            scale: 2,
+            useCORS: true,
+            scrollY: 0
+          },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        try {
+            html2pdf().set(opt).from(element).save().then(() => {
+                buttons.forEach(btn => btn.style.display = '');
+            }).catch(err => {
+                console.error("PDF Error:", err);
+                alert("Failed to generate PDF. Please check the console.");
+                buttons.forEach(btn => btn.style.display = '');
+            });
+        } catch (err) {
+            alert("An error occurred: " + err.message);
+            buttons.forEach(btn => btn.style.display = '');
+        }
+      });
+
+      document.querySelectorAll('.btn-download-chart').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const canvasId = this.getAttribute('data-chart');
+          const filename = this.getAttribute('data-filename');
+          const canvas = document.getElementById(canvasId);
+          const link = document.createElement('a');
+          link.download = filename;
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+        });
       });
     </script>
 

@@ -14,16 +14,7 @@ const app: Application = express();
 
 app.use(
   helmet({
-    contentSecurityPolicy: {
-      directives: {
-        "default-src": ["'self'"],
-        "script-src": ["'self'", "'unsafe-inline'", "cdn.jsdelivr.net"],
-        "style-src": ["'self'", "'unsafe-inline'", "cdn.jsdelivr.net", "fonts.googleapis.com"],
-        "font-src": ["'self'", "fonts.gstatic.com", "cdn.jsdelivr.net"],
-        "img-src": ["'self'", "data:", "https:"],
-        "connect-src": ["'self'"],
-      },
-    },
+    contentSecurityPolicy: false,
   })
 );
 app.use(cors());
