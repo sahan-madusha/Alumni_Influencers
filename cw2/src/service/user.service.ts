@@ -61,7 +61,7 @@ export const userService = {
       },
     });
 
-    await sendVerificationEmail(user.email, user?.name, token);
+    await sendVerificationEmail(user.email, user?.name, token,user?.id);
 
     return {
       ...user,

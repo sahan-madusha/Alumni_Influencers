@@ -57,7 +57,8 @@
               ></div>
 
               <button
-                type="submit"
+                type="button"
+                id="submitBtn"
                 class="btn btn-primary w-100 p-3 fw-bold"
                 style="border-radius: 12px"
               >
@@ -82,52 +83,51 @@
     </div>
 
     <script>
-      document
-        .getElementById("registerForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const name = document.getElementById("name").value;
-          const email = document.getElementById("email").value;
-          const password = document.getElementById("password").value;
-          const role = document.getElementById("role").value;
-          const msgDiv = document.getElementById("message");
 
-          msgDiv.classList.add("d-none");
-          msgDiv.classList.remove("alert-danger", "alert-success");
+      document.getElementById("submitBtn").addEventListener("click", async () => {
 
-          try {
-            const response = await fetch("http://localhost:5000/api/v1/user/register", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ name, email, password, role }),
-            });
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const role = document.getElementById("role").value;
+        const msgDiv = document.getElementById("message");
 
-            const data = await response.json();
+        msgDiv.classList.add("d-none");
+        msgDiv.classList.remove("alert-danger", "alert-success");
 
-            if (response.ok) {
-              msgDiv.textContent = data.message || "Registration successful! Please check your email for verification.";
-              msgDiv.classList.add("alert-success");
-              msgDiv.classList.remove("d-none");
-              document.getElementById("registerForm").reset();
-            } else {
-              let errorMsg = "Registration failed.";
-              if (data.errors && data.errors.length > 0) {
-                errorMsg = data.errors[0].message;
-              } else if (data.message) {
-                errorMsg = data.message;
-              }
-              msgDiv.textContent = errorMsg;
-              msgDiv.classList.add("alert-danger");
-              msgDiv.classList.remove("d-none");
+        try {
+          const response = await fetch("/api/v1/user/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name, email, password, role }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            msgDiv.textContent = data.message || "Registration successful! Please check your email for verification.";
+            msgDiv.classList.add("alert-success");
+            msgDiv.classList.remove("d-none");
+            document.getElementById("registerForm").reset();
+          } else {
+            let errorMsg = "Registration failed.";
+            if (data.errors && data.errors.length > 0) {
+              errorMsg = data.errors[0].message;
+            } else if (data.message) {
+              errorMsg = data.message;
             }
-          } catch (err) {
-            msgDiv.textContent = "A server error occurred. Please try again later.";
+            msgDiv.textContent = errorMsg;
             msgDiv.classList.add("alert-danger");
             msgDiv.classList.remove("d-none");
           }
-        });
+        } catch (err) {
+          msgDiv.textContent = "A server error occurred. Please try again later.";
+          msgDiv.classList.add("alert-danger");
+          msgDiv.classList.remove("d-none");
+        }
+      });
     </script>
     <%- include('partials/footer') %>
   </body>

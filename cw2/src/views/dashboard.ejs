@@ -24,67 +24,69 @@
         </div>
 
         <div class="row g-4">
-            <!-- 1. Programme Distribution -->
-            <div class="col-md-4">
-                <div class="card p-4 h-100">
-                    <h6 class="fw-bold mb-3">Graduates by Programme</h6>
-                    <canvas id="programmeChart"></canvas>
+            <!-- 1. Curriculum Skills Gap -->
+            <div class="col-md-6">
+                <div class="card p-4 h-100 shadow-sm border-0">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-mortarboard-fill me-2"></i>Curriculum Skills Gap</h6>
+                    <canvas id="skillsGapChart"></canvas>
                 </div>
             </div>
 
-            <!-- 2. Industry Sectors -->
-            <div class="col-md-4">
-                <div class="card p-4 h-100">
-                    <h6 class="fw-bold mb-3">Industry Sector Distribution</h6>
+            <!-- 2. Employment by Industry Sector -->
+            <div class="col-md-6">
+                <div class="card p-4 h-100 shadow-sm border-0">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-briefcase-fill me-2"></i>Industry Sector Distribution</h6>
                     <canvas id="sectorChart"></canvas>
                 </div>
             </div>
 
-            <!-- 3. User Status -->
-            <div class="col-md-4">
-                <div class="card p-4 h-100">
-                    <h6 class="fw-bold mb-3">Alumni Status</h6>
-                    <canvas id="statusChart"></canvas>
-                </div>
-            </div>
-
-            <!-- 4. Skills Gap Detection -->
-            <div class="col-md-8">
-                <div class="card p-4 h-100">
-                    <h6 class="fw-bold mb-3">Skills Gap Detection (Independent Certifications)</h6>
-                    <canvas id="certChart"></canvas>
-                </div>
-            </div>
-
-            <!-- 5. Social Presence -->
-            <div class="col-md-4">
-                <div class="card p-4 h-100">
-                    <h6 class="fw-bold mb-3">Professional Social Presence</h6>
-                    <canvas id="socialChart"></canvas>
-                </div>
-            </div>
-
-            <!-- 6. Monthly Growth -->
+            <!-- 3. Top 5 Job Titles -->
             <div class="col-md-6">
-                <div class="card p-4 h-100">
-                    <h6 class="fw-bold mb-3">Monthly Alumni Registration Growth</h6>
-                    <canvas id="growthChart"></canvas>
+                <div class="card p-4 h-100 shadow-sm border-0">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-person-badge-fill me-2"></i>Top 5 Job Titles</h6>
+                    <canvas id="jobTitlesChart"></canvas>
                 </div>
             </div>
 
-            <!-- 7. Graduation Trends -->
+            <!-- 4. Cloud Growth -->
             <div class="col-md-6">
-                <div class="card p-4 h-100">
-                    <h6 class="fw-bold mb-3">Graduation Year Trends</h6>
-                    <canvas id="timelineChart"></canvas>
+                <div class="card p-4 h-100 shadow-sm border-0">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-cloud-arrow-up-fill me-2"></i>Industry Demand: Cloud Growth</h6>
+                    <canvas id="cloudGrowthChart"></canvas>
                 </div>
             </div>
 
-            <!-- 8. Top Employers -->
+            <!-- 5. Geographic Distribution -->
+            <div class="col-md-6">
+                <div class="card p-4 h-100 shadow-sm border-0">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-geo-alt-fill me-2"></i>Geographic Distribution</h6>
+                    <canvas id="geoChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 6. Agile/Scrum Trends -->
+            <div class="col-md-6">
+                <div class="card p-4 h-100 shadow-sm border-0">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-arrow-repeat me-2"></i>Professional Development: Agile/Scrum</h6>
+                    <canvas id="agileScrumChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 7. Top Employers -->
             <div class="col-md-12">
-                <div class="card p-4 h-100">
-                    <h6 class="fw-bold mb-3">Top Alumni Employers</h6>
+                <div class="card p-4 h-100 shadow-sm border-0">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-building me-2"></i>Top Alumni Employers</h6>
                     <canvas id="employerChart" style="max-height: 300px;"></canvas>
+                </div>
+            </div>
+
+            <!-- 8. Emerging Career Pathways -->
+            <div class="col-md-12">
+                <div class="card p-4 h-100 shadow-sm border-0">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-compass-fill me-2"></i>Emerging Career Pathways</h6>
+                    <div style="max-width: 500px; margin: auto;">
+                        <canvas id="pathwayChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -93,120 +95,117 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const analytics = <%- JSON.stringify(analytics) %>;
+        const colors = ['#6366f1', '#22d3ee', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6', '#ec4899', '#3b82f6'];
 
-        const colors = ['#6366f1', '#22d3ee', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6', '#ec4899'];
-
-        // 1. Programme Chart (Doughnut)
-        new Chart(document.getElementById('programmeChart'), {
-            type: 'doughnut',
+        // 1. Skills Gap (Bar)
+        new Chart(document.getElementById('skillsGapChart'), {
+            type: 'bar',
             data: {
-                labels: Object.keys(analytics.byProgramme),
+                labels: Object.keys(analytics.skillsGap),
                 datasets: [{
-                    data: Object.values(analytics.byProgramme),
-                    backgroundColor: colors
+                    label: 'Certifications',
+                    data: Object.values(analytics.skillsGap),
+                    backgroundColor: colors[0]
                 }]
             },
-            options: { plugins: { legend: { position: 'bottom' } } }
+            options: { responsive: true, plugins: { legend: { display: false } } }
         });
 
         // 2. Sector Chart (Pie)
         new Chart(document.getElementById('sectorChart'), {
             type: 'pie',
             data: {
-                labels: Object.keys(analytics.bySector),
+                labels: Object.keys(analytics.industrySector),
                 datasets: [{
-                    data: Object.values(analytics.bySector),
-                    backgroundColor: colors.slice().reverse()
+                    data: Object.values(analytics.industrySector),
+                    backgroundColor: colors
                 }]
             },
             options: { plugins: { legend: { position: 'bottom' } } }
         });
 
-        // 3. Status Chart (Polar Area)
-        new Chart(document.getElementById('statusChart'), {
-            type: 'polarArea',
-            data: {
-                labels: Object.keys(analytics.userStatus),
-                datasets: [{
-                    data: Object.values(analytics.userStatus),
-                    backgroundColor: ['#10b981', '#f59e0b', '#ef4444']
-                }]
-            },
-            options: { plugins: { legend: { position: 'bottom' } } }
-        });
-
-        // 4. Skills Gap Chart (Bar)
-        new Chart(document.getElementById('certChart'), {
+        // 3. Job Titles (Horizontal Bar)
+        new Chart(document.getElementById('jobTitlesChart'), {
             type: 'bar',
             data: {
-                labels: Object.keys(analytics.certifications),
+                labels: Object.keys(analytics.jobTitles),
                 datasets: [{
-                    label: 'Independent Certifications',
-                    data: Object.values(analytics.certifications),
-                    backgroundColor: '#6366f1'
+                    label: 'Profiles',
+                    data: Object.values(analytics.jobTitles),
+                    backgroundColor: colors[2]
                 }]
-            }
+            },
+            options: { indexAxis: 'y', plugins: { legend: { display: false } } }
         });
 
-        // 5. Social Presence (Radar)
-        new Chart(document.getElementById('socialChart'), {
-            type: 'radar',
-            data: {
-                labels: Object.keys(analytics.socialPresence),
-                datasets: [{
-                    label: 'Profiles Found',
-                    data: Object.values(analytics.socialPresence),
-                    fill: true,
-                    backgroundColor: 'rgba(99, 102, 241, 0.2)',
-                    borderColor: '#6366f1',
-                    pointBackgroundColor: '#6366f1'
-                }]
-            }
-        });
-
-        // 6. Growth Chart (Line/Area)
-        new Chart(document.getElementById('growthChart'), {
+        // 4. Cloud Growth (Line)
+        new Chart(document.getElementById('cloudGrowthChart'), {
             type: 'line',
             data: {
-                labels: Object.keys(analytics.registrationGrowth),
+                labels: Object.keys(analytics.cloudGrowth),
                 datasets: [{
-                    label: 'New Registrations',
-                    data: Object.values(analytics.registrationGrowth),
-                    fill: true,
+                    label: 'Cloud Certifications',
+                    data: Object.values(analytics.cloudGrowth),
+                    borderColor: colors[1],
                     backgroundColor: 'rgba(34, 211, 238, 0.1)',
-                    borderColor: '#22d3ee',
+                    fill: true,
                     tension: 0.4
                 }]
             }
         });
 
-        // 7. Timeline Chart (Bar)
-        new Chart(document.getElementById('timelineChart'), {
+        // 5. Geographic Distribution (Bar - simplified from Map for stability)
+        new Chart(document.getElementById('geoChart'), {
             type: 'bar',
             data: {
-                labels: Object.keys(analytics.graduationTrends),
+                labels: Object.keys(analytics.geographicDistribution).length > 0 ? Object.keys(analytics.geographicDistribution) : ['None'],
                 datasets: [{
-                    label: 'Graduates',
-                    data: Object.values(analytics.graduationTrends),
-                    backgroundColor: '#f59e0b'
+                    label: 'Alumni Count',
+                    data: Object.keys(analytics.geographicDistribution).length > 0 ? Object.values(analytics.geographicDistribution) : [0],
+                    backgroundColor: colors[3]
                 }]
             }
         });
 
-        // 8. Employer Chart (Horizontal Bar)
+        // 6. Agile/Scrum (Doughnut)
+        new Chart(document.getElementById('agileScrumChart'), {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(analytics.agileScrum),
+                datasets: [{
+                    data: Object.values(analytics.agileScrum),
+                    backgroundColor: [colors[4], '#e5e7eb']
+                }]
+            },
+            options: { plugins: { legend: { position: 'bottom' } } }
+        });
+
+        // 7. Top Employers (Bar)
         new Chart(document.getElementById('employerChart'), {
             type: 'bar',
             data: {
                 labels: Object.keys(analytics.topEmployers),
                 datasets: [{
-                    label: 'Alumni per Company',
+                    label: 'Alumni Count',
                     data: Object.values(analytics.topEmployers),
-                    backgroundColor: '#10b981'
+                    backgroundColor: colors[5]
                 }]
-            },
-            options: {
-                indexAxis: 'y',
-                scales: { x: { beginAtZero: true } }
+            }
+        });
+
+        // 8. Career Pathways (Radar)
+        new Chart(document.getElementById('pathwayChart'), {
+            type: 'radar',
+            data: {
+                labels: Object.keys(analytics.careerPathways),
+                datasets: [{
+                    label: 'Pathway Density',
+                    data: Object.values(analytics.careerPathways),
+                    fill: true,
+                    backgroundColor: 'rgba(139, 92, 246, 0.2)',
+                    borderColor: '#8b5cf6',
+                    pointBackgroundColor: '#8b5cf6'
+                }]
             }
         });
     </script>

@@ -71,6 +71,7 @@ model Profile {
 
   isAlumniOfTheDay Boolean @default(false)
   industrySector   String?
+  country          String?
 
   Degrees        Degree[]
   Employments    Employment[]
