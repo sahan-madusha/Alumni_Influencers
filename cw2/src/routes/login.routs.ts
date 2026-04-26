@@ -7,6 +7,7 @@ const router = Router();
 
 router.get("/", userController.renderLogin);
 router.get("/register", userController.renderRegister);
+router.get("/email-verification", userController.renderVerifyEmail);
 router.post(
   "/register",
   validate(registerUserSchema),

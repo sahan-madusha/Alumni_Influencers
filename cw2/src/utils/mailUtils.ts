@@ -23,7 +23,7 @@ export const sendVerificationEmail = async (
   id: string,
 ) => {
   const subject = "Verify Your Email";
-  const body = `Hi ${name},\n\nPlease verify your email by clicking on the link below:\n\n${id}:${token}\n\nBest regards,\nAlumni Influencers Team`;
+  const body = `Hi ${name},\n\nPlease verify your email by clicking on the link below:\n\nhttp://localhost:5000/email-verification?id=${id}&token=${token}\n\nBest regards,\nAlumni Influencers Team`;
   return sendEmail(email, subject, body);
 };
 

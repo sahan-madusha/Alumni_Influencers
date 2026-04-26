@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+  <body class="bg-light">
+    <div class="container">
+      <div class="row justify-content-center align-items-center vh-100">
+        <div class="col-md-5 col-lg-4">
+          <div class="card border-0 shadow-lg p-5 text-center" style="border-radius: 20px">
+            <div id="statusIcon" class="mb-4">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            
+            <div id="statusTitle" class="h3 fw-bold text-primary mb-3">Verifying Email</div>
+            <p id="statusMessage" class="text-muted small mb-4">
+              Please wait while we verify your account.
+            </p>
+
+            <div id="actionButton" class="d-none">
+                <a href="/" class="btn btn-primary w-100 p-3 fw-bold" style="border-radius: 12px">
+                    Go to Login
+                </a>
+            </div>
+          </div>
+          <p class="text-center text-muted small mt-4">
+            © 2026 IIT Alumni Network
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.onload = async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get("id");
+        const token = urlParams.get("token");
+
+        const statusIcon = document.getElementById("statusIcon");
+        const statusTitle = document.getElementById("statusTitle");
+        const statusMessage = document.getElementById("statusMessage");
+        const actionButton = document.getElementById("actionButton");
+
+        if (!id || !token) {
+          statusIcon.innerHTML = '<i class="bi bi-envelope-exclamation text-warning" style="font-size: 3rem;"></i>';
+          statusTitle.textContent = "Check Your Email";
+          statusMessage.textContent = "A verification link has been sent to your email address. Please click the link to activate your account.";
+          return;
+        }
+
+        try {
+          const response = await fetch("/api/v1/user/email-verification", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id, token }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            statusIcon.innerHTML = '<i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>';
+            statusTitle.textContent = "Success!";
+            statusMessage.textContent = "Your email has been verified successfully. Redirecting you to login...";
+            
+            setTimeout(() => {
+              window.location.href = "/";
+            }, 1000);
+          } else {
+            statusIcon.innerHTML = '<i class="bi bi-x-circle-fill text-danger" style="font-size: 3rem;"></i>';
+            statusTitle.textContent = "Verification Failed";
+            statusMessage.textContent = data.message || "The verification link is invalid or has expired.";
+            actionButton.classList.remove("d-none");
+          }
+        } catch (err) {
+          statusIcon.innerHTML = '<i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>';
+          statusTitle.textContent = "Error";
+          statusMessage.textContent = "A server error occurred. Please try again later.";
+          actionButton.classList.remove("d-none");
+        }
+      };
+    </script>
+    <%- include('partials/footer') %>
+  </body>
+</html>

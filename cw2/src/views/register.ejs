@@ -107,10 +107,9 @@
           const data = await response.json();
 
           if (response.ok) {
-            msgDiv.textContent = data.message || "Registration successful! Please check your email for verification.";
+            msgDiv.textContent = data.message || "Registration successful! Redirecting to verification...";
             msgDiv.classList.add("alert-success");
             msgDiv.classList.remove("d-none");
-            document.getElementById("registerForm").reset();
           } else {
             let errorMsg = "Registration failed.";
             if (data.errors && data.errors.length > 0) {

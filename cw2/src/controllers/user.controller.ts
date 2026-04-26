@@ -168,6 +168,9 @@ export const userController = {
   renderRegister: async (req: Request, res: Response) => {
     res.render("register");
   },
+  renderVerifyEmail: async (req: Request, res: Response) => {
+    res.render("email-verification");
+  },
 
   registerStaff: async (req: Request, res: Response) => {
     try {
