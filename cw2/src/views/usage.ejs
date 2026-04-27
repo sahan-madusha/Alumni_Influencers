@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+  <body>
+    <%- include('partials/header') %>
+
+    <script>
+      if (!localStorage.getItem("token")) {
+        window.location.href = "/";
+      }
+    </script>
+
+    <main class="container py-5 mt-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="fw-bold mb-1">System Usage Statistics</h1>
+          <p class="text-muted">Monitoring client access and API activity</p>
+        </div>
+        <div class="text-end">
+          <div class="h3 fw-bold text-success mb-0"><%= stats.loginCount %></div>
+          <div class="text-muted small text-uppercase fw-bold">Total Logins Recorded</div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <div class="col-md-4">
+          <div class="card p-4 shadow-sm border-0 h-100" style="border-radius: 16px;">
+            <h6 class="fw-bold mb-3"><i class="bi bi-activity me-2 text-primary"></i>Top Endpoints</h6>
+            <ul class="list-group list-group-flush">
+              <% stats.endpointCounts.forEach(item => { %>
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  <code class="small"><%= item.endpoint %></code>
+                  <span class="badge bg-primary rounded-pill"><%= item._count.endpoint %></span>
+                </li>
+              <% }) %>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-md-8">
+          <div class="card p-4 shadow-sm border-0 h-100" style="border-radius: 16px;">
+            <h6 class="fw-bold mb-3"><i class="bi bi-clock-history me-2 text-info"></i>Recent Activity Logs</h6>
+            <div class="table-responsive">
+              <table class="table table-sm small table-hover">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Method</th>
+                    <th>Endpoint</th>
+                    <th>Status</th>
+                    <th>Client ID</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% stats.logs.forEach(log => { %>
+                    <tr>
+                      <td class="text-muted"><%= new Date(log.timestamp).toLocaleTimeString() %></td>
+                      <td><span class="badge bg-light text-dark"><%= log.method %></span></td>
+                      <td><code><%= log.endpoint %></code></td>
+                      <td>
+                        <span class="badge <%= log.statusCode < 400 ? 'bg-success' : 'bg-danger' %>">
+                          <%= log.statusCode %>
+                        </span>
+                      </td>
+                      <td class="text-muted"><%= log.userId || log.apiKeyId || 'Anonymous' %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>

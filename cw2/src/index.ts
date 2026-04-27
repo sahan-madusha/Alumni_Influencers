@@ -4,7 +4,7 @@ import cors from "cors";
 import helmet from "helmet";
 import { prisma } from "./utils/prisma";
 import { profileRoutes, userRoutes, bidRoutes, dashboardRoutes, loginRoutes } from "./routes";
-import { errorHandler, globalLimiter } from "./middlewares";
+import { errorHandler, globalLimiter, auditMiddleware } from "./middlewares";
 import { initScheduler } from "./utils/scheduler";
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "./swagger.json";
@@ -21,6 +21,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(globalLimiter);
+app.use(auditMiddleware);
 
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 

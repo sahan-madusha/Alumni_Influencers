@@ -1,8 +1,24 @@
 import { prisma } from "../utils/prisma";
 
 export const dashboardService = {
-  getDashboardData: async () => {
+  getDashboardData: async (filters?: { programme?: string, year?: string, sector?: string }) => {
+    const where: any = {};
+    if (filters?.sector) where.industrySector = filters.sector;
+    
+    if (filters?.programme || filters?.year) {
+      const degreeFilter: any = {};
+      if (filters?.programme) degreeFilter.name = { contains: filters.programme, mode: 'insensitive' };
+      if (filters?.year) {
+        degreeFilter.endDate = {
+          gte: new Date(`${filters.year}-01-01`),
+          lte: new Date(`${filters.year}-12-31`)
+        };
+      }
+      where.Degrees = { some: degreeFilter };
+    }
+
     return await prisma.profile.findMany({
+      where,
       include: {
         user: true,
         Degrees: true,
@@ -84,5 +100,25 @@ export const dashboardService = {
     analytics.skillsGap = Object.fromEntries(Object.entries(analytics.skillsGap).sort((a, b) => (b[1] as any) - (a[1] as any)).slice(0, 15));
 
     return analytics;
+  },
+
+  getUsageStats: async () => {
+    const logs = await prisma.auditLog.findMany({
+      orderBy: { timestamp: "desc" },
+      take: 50,
+    });
+
+    const endpointCounts = await prisma.auditLog.groupBy({
+      by: ['endpoint'],
+      _count: { endpoint: true },
+      orderBy: { _count: { endpoint: 'desc' } },
+      take: 5
+    });
+
+    const loginCount = await prisma.auditLog.count({
+      where: { endpoint: { contains: 'login' } }
+    });
+
+    return { logs, endpointCounts, loginCount };
   }
 };

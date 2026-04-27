@@ -49,7 +49,6 @@ async function seed() {
     const createdAt = new Date();
     createdAt.setFullYear(2021 + Math.floor(Math.random() * 6));
 
-    // Select 3 to 6 random skills for each user
     const numSkills = 3 + Math.floor(Math.random() * 4);
     const selectedSkills = [...allSkills]
       .sort(() => 0.5 - Math.random())
