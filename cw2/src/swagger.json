@@ -524,6 +524,14 @@
             "description": "OK"
           }
         }
+      },
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
       }
     },
     "/status": {
@@ -539,7 +547,7 @@
         }
       }
     },
-    "/slots": {
+    "/limit": {
       "get": {
         "tags": [
           "Bidding"
@@ -587,6 +595,60 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/graphs": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "description": "Render the Advanced Analytics Graphs view.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/usage": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "description": "Render the System Usage Statistics view.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/register": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/email-verification": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
           }
         }
       }
