@@ -31,8 +31,9 @@ export const sendPasswordResetEmail = async (
   email: string,
   name: string | null = "User",
   token: string,
+  id: string,
 ) => {
   const subject = "Reset Your Password";
-  const body = `Hi ${name},\n\nPlease reset your password by clicking on the link below:\n\n${token}\n\nBest regards,\nAlumni Influencers Team`;
+  const body = `Hi ${name},\n\nPlease reset your password by clicking on the link below:\n\nhttp://localhost:5000/password-reset?id=${id}&token=${token}\n\nBest regards,\nAlumni Influencers Team`;
   return sendEmail(email, subject, body);
 };

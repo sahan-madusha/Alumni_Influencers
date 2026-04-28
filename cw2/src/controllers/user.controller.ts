@@ -172,6 +172,14 @@ export const userController = {
     res.render("email-verification");
   },
 
+  renderForgotPassword: async (req: Request, res: Response) => {
+    res.render("forgot-password");
+  },
+
+  renderResetPassword: async (req: Request, res: Response) => {
+    res.render("reset-password");
+  },
+
   registerStaff: async (req: Request, res: Response) => {
     try {
       const { email, password, name } = req.body;

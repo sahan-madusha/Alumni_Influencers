@@ -271,7 +271,7 @@ export const userService = {
       },
     });
 
-    await sendPasswordResetEmail(user.email, user?.name, token);
+    await sendPasswordResetEmail(user.email, user?.name, token, user.id);
 
     return {
       token,
