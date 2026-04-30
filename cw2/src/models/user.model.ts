@@ -7,8 +7,8 @@ export const registerUserSchema = z.object({
     email: z.string().email().refine(validateEmail, {
       message: "Only IIT emails are allowed",
     }),
-    password: z.string().min(4).refine(validatePassword, {
-      message: "Password must be at least 4 characters long",
+    password: z.string().min(8).refine(validatePassword, {
+      message: "Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 number, and 1 special character",
     }),
     name: z.string(),
     role: z.nativeEnum(Role).optional().default(Role.ALUMNI),
@@ -20,8 +20,8 @@ export const registerStaffSchema = z.object({
     email: z.string().email().refine(validateEmail, {
       message: "Only IIT emails are allowed for staff registration",
     }),
-    password: z.string().min(4).refine(validatePassword, {
-      message: "Password must be at least 4 characters long",
+    password: z.string().min(8).refine(validatePassword, {
+      message: "Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 number, and 1 special character",
     }),
     name: z.string(),
   }),
@@ -53,8 +53,8 @@ export const resetPasswordSchema = z.object({
   body: z.object({
     id: z.string().uuid(),
     token: z.string(),
-    password: z.string().min(4).refine(validatePassword, {
-      message: "Password must be at least 4 characters long",
+    password: z.string().min(8).refine(validatePassword, {
+      message: "Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 number, and 1 special character",
     }),
   }),
 });
